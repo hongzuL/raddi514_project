@@ -6,12 +6,14 @@ mask   = imread('dataset1_mask_hip.png'); % Load the mask of regions of interest
 us_img = rgb2gray(us_img);
 mask   = rgb2gray(mask);
 % Apply Enhancement
-% image sharpen
-img_sharp = imsharpen(us_img);
-img_adjust = imadjust(us_img);
+% noise removal
+img_rm_noise = medfilt2(us_img);
+% Contrast Enhancement
+img_adjust = imadjust(img_rm_noise,[0.15 0.5],[0 1]);
 % Apply threshold
 img = img_adjust;
-%img(us_img<threshold)=0;
+% threshold = mean(mean(img));
+% img(img<threshold)=0;
 % Apply filter to the image for edge detection
 % sobel
 sobel_x = [-1,0,1;-2,0,2;-1,0,1];
@@ -31,10 +33,10 @@ rec_img_lap8 = img-lap8_tmp;
 log_k = imfilter(img,fspecial('log',3));
 rec_img_log = img-log_k;
 
-rec_img_sobel = imadjust(rec_img_sobel);
-rec_img_lap4 = imadjust(rec_img_lap4);
-rec_img_lap8 = imadjust(rec_img_lap8);
-rec_img_log = imadjust(rec_img_log);
+% rec_img_sobel = imadjust(rec_img_sobel);
+% rec_img_lap4 = imadjust(rec_img_lap4);
+% rec_img_lap8 = imadjust(rec_img_lap8);
+% rec_img_log = imadjust(rec_img_log);
 
 % rec_img_sobel(rec_img_sobel<mean(mean(rec_img_sobel)))=0;
 % rec_img_lap4(rec_img_lap4<mean(mean(rec_img_lap4)))=0;
@@ -46,8 +48,9 @@ rec_img_log = imadjust(rec_img_log);
 
 % Display
 figure(1),
-subplot(1,2,1); imshow(us_img,[])
-subplot(1,2,2); imshow(img_adjust,[])
+subplot(1,3,1); imshow(us_img,[]),title('Original')
+subplot(1,3,2); imshow(img_rm_noise,[]),title('adjust contrast')
+subplot(1,3,3); imshow(img_adjust,[]),title('remove noise')
 figure(2)
 subplot(2,2,1); imshow(rec_img_sobel,[]),title('sobel')
 subplot(2,2,2); imshow(rec_img_lap4,[]),title('lap 4')
