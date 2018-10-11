@@ -11,10 +11,7 @@ mask   = rgb2gray(mask);
 img_rm_noise = medfilt2(us_img);
 % Contrast Enhancement
 img_adjust = imadjust(img_rm_noise,[0.1 0.5]);
-% Apply threshold
 img = img_adjust;
-% threshold = mean(mean(img));
-% img(img<threshold)=0;
 % Apply filter to the image for edge detection
 % sobel
 sobel_x = [-1,0,1;-2,0,2;-1,0,1];
@@ -34,20 +31,6 @@ rec_img_lap8 = img-lap8_tmp;
 log_k = imfilter(img,fspecial('log',3));
 rec_img_log = img-log_k;
 
-% rec_img_sobel = imadjust(rec_img_sobel);
-% rec_img_lap4 = imadjust(rec_img_lap4);
-% rec_img_lap8 = imadjust(rec_img_lap8);
-% rec_img_log = imadjust(rec_img_log);
-
-% rec_img_sobel(rec_img_sobel<mean(mean(rec_img_sobel)))=0;
-% rec_img_lap4(rec_img_lap4<mean(mean(rec_img_lap4)))=0;
-% rec_img_lap8(rec_img_lap8<mean(mean(rec_img_lap8)))=0;
-% rec_img_log(rec_img_log<mean(mean(rec_img_log)))=0;
-% Calcualte Indices
-    % Convert to double if necesary
-    % Multiply by mask
-%
-
 % Display
 figure(1),
 subplot(1,3,1); imshow(us_img,[]),title('Original')
@@ -62,19 +45,22 @@ subplot(2,2,4); imshow(rec_img_log,[]),title('log')
 % SNR
 signal = double(us_img).*(double(mask==255));
 noise = double(us_img).*(double(bg_mask==255));
-SNR=10*log10(sum(sum(signal))/sum(sum(noise)));
-disp(SNR)
-disp(snr(signal,noise))
+fprintf("Original Image SNR: %f\n",snr(signal,noise))
+signal = double(img_rm_noise).*(double(mask==255));
+noise = double(img_rm_noise).*(double(bg_mask==255));
+fprintf("Image SNR after removed noise: %f\n",snr(signal,noise))
+signal = double(img_adjust).*(double(mask==255));
+noise = double(img_adjust).*(double(bg_mask==255));
+fprintf("Image SNR after adjust contrast: %f\n",snr(signal,noise))
 signal = double(rec_img_sobel).*(double(mask==255));
 noise = double(rec_img_sobel).*(double(bg_mask==255));
-SNR=10*log10(sum(sum(signal))/sum(sum(noise)));
-disp(SNR)
-disp(snr(signal,noise))
-% [peaksnr_sobel, snr_sobel] = psnr(uint8(rec_img_sobel), bg_mask);
-% fprintf("%f, %f\n",peaksnr_sobel, snr_sobel)
-% [peaksnr_lap4, snr_lap4] = psnr(uint8(rec_img_lap4), bg_mask);
-% fprintf("%f, %f\n",peaksnr_lap4, snr_lap4)
-% [peaksnr_lap8, snr_lap8] = psnr(uint8(rec_img_lap8), bg_mask);
-% fprintf("%f, %f\n",peaksnr_lap8, snr_lap8)
-% [peaksnr_log, snr_log] = psnr(uint8(rec_img_log), bg_mask);
-% fprintf("%f, %f\n",peaksnr_log, snr_log)
+fprintf("Sobel Enhanced Image SNR: %f\n",snr(signal,noise))
+signal = double(rec_img_lap4).*(double(mask==255));
+noise = double(rec_img_lap4).*(double(bg_mask==255));
+fprintf("lap 4 Enhanced Image SNR: %f\n",snr(signal,noise))
+signal = double(rec_img_lap8).*(double(mask==255));
+noise = double(rec_img_lap8).*(double(bg_mask==255));
+fprintf("lap 8 Enhanced Image SNR: %f\n",snr(signal,noise))
+signal = double(rec_img_log).*(double(mask==255));
+noise = double(rec_img_log).*(double(bg_mask==255));
+fprintf("log Enhanced Image SNR: %f\n",snr(signal,noise))
