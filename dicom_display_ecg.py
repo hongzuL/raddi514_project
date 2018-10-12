@@ -38,7 +38,7 @@ w_duration = 1.0/w_samplefreq
 unpack_fmt = '<%dh' % (len(waveform_data) / 2)
 unpacked_waveform_data = struct.unpack(unpack_fmt, waveform_data)
 signals = np.asarray(unpacked_waveform_data,dtype=np.float32)
-print(signals[1])
+print(len(signals))
 # Plot the ECG data animation
 vtkplot.update_plot(x=np.arange(2)*w_duration, y=signals[0:2], n_remove=len(signals), xrange_=1.0*len(signals)*w_duration)
 for i in range(len(signals)/30):
