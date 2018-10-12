@@ -41,7 +41,7 @@ signals = np.asarray(unpacked_waveform_data,dtype=np.float32)
 print('length of the signal: ',w_samples)
 print('total time of the signal: ',w_duration)
 print('signal frequency: ',w_samplefreq)
-print(w_channels_no)
+print(len(signals)/w_samplefreq)
 # Plot the ECG data animation
 vtkplot.update_plot(x=np.arange(2)*w_duration, y=signals[0:2], n_remove=len(signals), xrange_=1.0*len(signals)*w_duration)
 for i in range(len(signals)/30):
