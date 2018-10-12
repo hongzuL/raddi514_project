@@ -39,7 +39,7 @@ def read_siemens_echo_file(fname):
     return im_data, dim, spacing_
 
 
-file_in = r".\20170623_volunteer\CartesianDICOM\IM_0002\63756622_000.hdr"
+file_in = r".\20170623_volunteer\CartesianDICOM\IM_0002\63756622_001.hdr"
 
 
 
