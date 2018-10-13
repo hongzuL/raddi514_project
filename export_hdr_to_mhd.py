@@ -3,7 +3,8 @@
 import vtk
 import numpy as np
 import os
-
+from os import listdir
+from os.path import isfile,join
 # Function to read HDR and IMG image pairs
 def read_hdr_file(fname):
     with open(fname) as f:
@@ -38,32 +39,31 @@ def read_siemens_echo_file(fname):
     
     return im_data, dim, spacing_
 
+#file_in = r".\20170623_volunteer\CartesianDICOM\IM_0002\63756622_002.hdr"
+my_path = r".\20170623_volunteer\CartesianDICOM\IM_0002"
+for f in listdir(my_path):
+        file_check = f.split(".")
+        if(file_check[1]=='hdr'):
+                file_in = join(my_path,f)
+                print(f)
+                path_out = "Test"
 
-file_in = r".\20170623_volunteer\CartesianDICOM\IM_0002\63756622_001.hdr"
+                raw, dim, spacing = read_siemens_echo_file(file_in)
 
+                reader = vtk.vtkImageImport()
+                reader.CopyImportVoidPointer(raw, len(raw))
+                reader.SetDataScalarTypeToUnsignedChar()
+                reader.SetNumberOfScalarComponents(1)
+                reader.SetDataExtent(0, dim[0] - 1, 0, dim[1] - 1, 0, dim[2] - 1)
+                reader.SetWholeExtent(0, dim[0] - 1, 0, dim[1] - 1, 0, dim[2] - 1)
+                reader.SetDataOrigin(-(dim[0]-1) * (spacing[0] / 2), -(dim[1]-1) * (spacing[1] / 2), 0)
+                reader.SetDataSpacing(spacing[0], spacing[1], spacing[2]) 
 
-
-path_out = "Test"
-
-raw, dim, spacing = read_siemens_echo_file(file_in)
-
-reader = vtk.vtkImageImport()
-reader.CopyImportVoidPointer(raw, len(raw))
-reader.SetDataScalarTypeToUnsignedChar()
-reader.SetNumberOfScalarComponents(1)
-reader.SetDataExtent(0, dim[0] - 1, 0, dim[1] - 1, 0, dim[2] - 1)
-reader.SetWholeExtent(0, dim[0] - 1, 0, dim[1] - 1, 0, dim[2] - 1)
-reader.SetDataOrigin(-(dim[0]-1) * (spacing[0] / 2), -(dim[1]-1) * (spacing[1] / 2), 0)
-reader.SetDataSpacing(spacing[0], spacing[1], spacing[2]) 
-
-    
-
-
-mhdWriter = vtk.vtkMetaImageWriter()
-mhdWriter.SetFileName(os.path.splitext(os.path.basename(file_in))[0] + ".mhd")
-mhdWriter.SetInput(reader.GetOutput())
-mhdWriter.SetCompression(False)
-mhdWriter.Write()    
+                mhdWriter = vtk.vtkMetaImageWriter()
+                mhdWriter.SetFileName(os.path.splitext(os.path.basename(file_in))[0] + ".mhd")
+                mhdWriter.SetInput(reader.GetOutput())
+                mhdWriter.SetCompression(False)
+                mhdWriter.Write()    
 
 
 
