@@ -4,14 +4,12 @@ mask   = imread('InitialMask.png'); % Load the mask of regions of interest
 GT = imread('GT.png'); % Load the ground truth
 GT = ~imbinarize(GT); % binarize the gournd truth for easy comparision
 %% apply segmentation
-seg_img = activecontour(img,mask); % active contour
-figure(1),imshowpair(seg_img,GT)
-figure(2),imshowpair(seg_img,GT,'montage')
-[hausdorff_dist,tp,tn,fp,fn] = Hausdorff_distance(seg_img,GT);
+seg_img = activecontour(img,mask,70); % active contour
+[hausdorff_dist,tp,tn,fp,fn] = validation_metrics(seg_img,GT);
 precision = tp/(tp+fp);
 recall = tp/(tp+fn);
 dice = (2*tp)/(2*tp+fp+fn);
-fprintf('precision: %d\n',precision);
-fprintf('recall: %d\n',recall);
-fprintf('dice: %d\n',dice);
-fprintf('hausdorff dist: %d\n',hausdorff_dist);
+fprintf('precision: %2.4f\n',precision);
+fprintf('recall: %2.4f\n',recall);
+fprintf('dice: %2.4f\n',dice);
+fprintf('hausdorff distance: %2.4f\n',hausdorff_dist);

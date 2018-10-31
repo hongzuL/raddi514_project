@@ -5,3 +5,5 @@ pyqt 4.11.4
 numpy 1.14.0
 pydicom 1.1.0
 python 2.7
+SimpleITK 1.1.0
+matlab 2018a

@@ -39,6 +39,7 @@ def read_siemens_echo_file(fname):
     
     return im_data, dim, spacing_
 
+#* convert all hdr file to mhd file in a folder
 #file_in = r".\20170623_volunteer\CartesianDICOM\IM_0002\63756622_002.hdr"
 my_path = r".\20170623_volunteer\CartesianDICOM\IM_0002"
 for f in listdir(my_path):
