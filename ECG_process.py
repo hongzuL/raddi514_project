@@ -73,6 +73,9 @@ def ECG_analysis(signals,fs,signal_len,slice_len,sig_list,matlab_eng,file_name,s
             if(len(other_peaks)>=2):
                 Peak_candidates += other_peaks
                 Peak_candidates_avg_pvd += other_peaks_avg_pvd
+            else:
+                break
+            
     # check for P wave and T wave, T wave peak should close to left R peak and T wave should close to right R peak
     middle_loc = int((left_R_loc+right_R_loc)/2)
     #for i in range(len(Peak_candidates)):
