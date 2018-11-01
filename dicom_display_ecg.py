@@ -25,19 +25,18 @@ USIMG_dir = str(QFileDialog.getExistingDirectory(None,"Open Root folder for all 
 for ecg_files in listdir(ECG_dir):
     ECG_name = ecg_files
     fname =  os.path.join(ECG_dir,ecg_files)
-    print ('the ECG file name is:' + ECG_name)
+    
     US_found = False
     sequence_file = ''
     for subdir,dirs,files in os.walk(USIMG_dir):
         for US_file in files:
             extension_check = US_file.split('.')
             if(extension_check[1]=='seq' and extension_check[0]==ECG_name):
-                print US_file
                 US_found = True
                 sequence_file = os.path.join(subdir,US_file)
                 break
     if(US_found==False):
-        print ('Cannot find the corresponding Ultrasound images for ECG '+ECG_name)
+        print ('==================================='+ECG_name)
     else:
         #* read and parse the sequence file to get the information of the ultrasound image slice
         seq_file = open(sequence_file,'r')
@@ -78,17 +77,16 @@ for ecg_files in listdir(ECG_dir):
         save_plot = './ECG_plots/'
         ECG_len = len(signals)
         slice_len = int(ECG_len/num_slices)
-        print('length of the signal: '+str(ECG_len))
-        print('total time of the signal: '+str(len(signals)/w_samplefreq))
-        print('signal frequency: '+str(w_samplefreq))
-        print('Each slice should contain '+str(slice_len)+' sample points')
+        # print('length of the signal: '+str(ECG_len))
+        # print('total time of the signal: '+str(len(signals)/w_samplefreq))
+        # print('signal frequency: '+str(w_samplefreq))
+        # print('Each slice should contain '+str(slice_len)+' sample points')
         #* start matlab engine
         matlab_eng = matlab.engine.start_matlab()
         #* convert the np.asarray to python list
         sig_list = signals.tolist()
         sig_list = matlab.double(sig_list)
         ECG_analysis(signals,w_samplefreq,ECG_len,slice_len,sig_list,matlab_eng,ECG_name,save_plot)
-        break
         # Plot the ECG data animation
         # vtkplot.update_plot(x=np.arange(2)*w_duration, y=signals[0:2], n_remove=len(signals), xrange_=1.0*len(signals)*w_duration)
         # for i in range(len(signals)/30):
