@@ -57,7 +57,7 @@ RTTrackerWrapper(Iref,I);
 [registered_image] = RTTrackerWrapper(I);
 
 % Get the estimated motion field
-[motion_field] = RTTrackerWrapper();
+[motion_field] = RTTrackerWrapper(label_image_i);
 
 %% Display registered images & estimated motion field
 display_result2D(Iref,I,registered_image,motion_field);
