@@ -52,7 +52,7 @@ RTTrackerWrapper(dimx, dimy, dimz, ...
 		 accelerationFactor, ...
 		 alpha); 
 %% Estimate the motion between the reference and the current images
-RTTrackerWrapper(Iref, I);
+RTTrackerWrapper(Iref,I);
 % Apply the estimated motion on the current image
 [registered_image] = RTTrackerWrapper(I);
 
